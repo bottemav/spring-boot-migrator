@@ -30,19 +30,8 @@ public class CompanyResource {
     @Path("/list")
     public List<String> listCompanies(
             @QueryParam("q") String searchBy,
-            @QueryParam("sort") String sort,
-            @DefaultValue("0") @QueryParam("page") int page,
-            @DefaultValue("10") @QueryParam("size") int pageSize) {
+            @QueryParam("sort") String sort) {
         return Collections.emptyList();
-    }
-
-    @POST
-    @Path("{companyId}/logo")
-    @Consumes(MULTIPART_FORM_DATA)
-    @Produces(APPLICATION_JSON)
-    public String uploadCompanyLogo(@PathParam("companyId") String companyId,
-                                            @FormDataParam("logo") FormDataBodyPart file) {
-        return null;
     }
 
 }
