@@ -148,24 +148,25 @@ class OpenRewriteDeclarativeRecipeAdapterIntegrationTest {
     @Test
     void adapterActionShouldExecuteOpenRewriteYamlRecipe() throws IOException {
         String validSbmRecipeYaml =
-                        "- name: test-recipe\n" +
-                        "  description: Replace deprecated spring.datasource.* properties\n" +
-                        "  condition:\n" +
-                        "    type: org.springframework.sbm.common.migration.conditions.TrueCondition\n" +
-                        "  actions:\n" +
-                        "    - type: org.springframework.sbm.engine.recipe.OpenRewriteDeclarativeRecipeAdapter\n" +
-                        "      condition:\n" +
-                        "        type: org.springframework.sbm.common.migration.conditions.TrueCondition\n" +
-                        "      description: Call a OpenRewrite recipe\n" +
-                        "      openRewriteRecipe: |-\n" +
-                        "        type: specs.openrewrite.org/v1beta/recipe\n" +
-                        "        name: org.openrewrite.java.RemoveAnnotation\n" +
-                        "        displayName: Order imports\n" +
-                        "        description: Order imports\n" +
-                        "        recipeList:\n" +
-                        "          - org.openrewrite.java.RemoveAnnotation:\n" +
-                        "              annotationPattern: \"@java.lang.Deprecated\"\n" +
-                        "          - org.openrewrite.java.format.AutoFormat";
+                """
+                        - name: test-recipe
+                          description: Replace deprecated spring.datasource.* properties
+                          condition:
+                            type: org.springframework.sbm.common.migration.conditions.TrueCondition
+                          actions:
+                            - type: org.springframework.sbm.engine.recipe.OpenRewriteDeclarativeRecipeAdapter
+                              condition:
+                                type: org.springframework.sbm.common.migration.conditions.TrueCondition
+                              description: Call a OpenRewrite recipe
+                              openRewriteRecipe: |-
+                                type: specs.openrewrite.org/v1beta/recipe
+                                name: org.openrewrite.java.RemoveAnnotation
+                                displayName: Order imports
+                                description: Order imports
+                                recipeList:
+                                  - org.openrewrite.java.RemoveAnnotation:
+                                      annotationPattern: "@java.lang.Deprecated"
+                                  - org.openrewrite.java.format.AutoFormat""";
 
         // parse the recipe
         Recipe[] recipes = recipeParser.parseRecipe(validSbmRecipeYaml);
