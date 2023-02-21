@@ -15,15 +15,15 @@
  */
 package org.springframework.sbm.jee.jaxrs.recipes;
 
+import org.junit.jupiter.api.Test;
 import org.openrewrite.java.JavaParser;
+import org.springframework.sbm.engine.context.ProjectContext;
 import org.springframework.sbm.engine.recipe.AbstractAction;
 import org.springframework.sbm.java.api.JavaSource;
-import org.springframework.sbm.engine.context.ProjectContext;
 import org.springframework.sbm.java.impl.RewriteJavaParser;
 import org.springframework.sbm.project.resource.SbmApplicationProperties;
 import org.springframework.sbm.project.resource.TestProjectContext;
 import org.springframework.sbm.testhelper.common.utils.TestDiff;
-import org.junit.jupiter.api.Test;
 
 import java.util.function.Supplier;
 
@@ -45,9 +45,9 @@ class ReplaceMediaTypeTest {
 
     @Test
     void replaceMediaTypeConstant_with_removed_import() {
-        String sourceCode =
-                """
+        String sourceCode = """
                 import javax.ws.rs.core.MediaType;
+                
                 class ControllerClass {
                     public String getHelloWorldJSON(String name) {
                         return MediaType.APPLICATION_XML;
@@ -69,7 +69,42 @@ class ReplaceMediaTypeTest {
                 .withJavaSources(sourceCode)
                 .withBuildFileHavingDependencies(
                         "org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec:1.0.1.Final",
-                        "org.springframework:spring-core:"+SPRING_VERSION
+                        "org.springframework:spring-core:" + SPRING_VERSION
+                )
+                .build();
+
+        ReplaceMediaType sut = new ReplaceMediaType(javaParserSupplier);
+        JavaSource javaSource = projectContext.getProjectJavaSources().list().get(0);
+        javaSource.apply(sut);
+
+        assertThat(javaSource.print()).isEqualTo(expected);
+    }
+
+    @Test
+    void replaceMediaTypeConstant_staticImports() {
+        String sourceCode = """
+                import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+                class ControllerClass {
+                    public String getHelloWorldJSON(String name) {
+                        return APPLICATION_JSON;
+                    }
+
+                }""";
+
+        String expected = """
+                import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+                class ControllerClass {
+                    public String getHelloWorldJSON(String name) {
+                        return APPLICATION_JSON_VALUE;
+                    }
+
+                }""";
+
+        ProjectContext projectContext = TestProjectContext.buildProjectContext()
+                .withJavaSources(sourceCode)
+                .withBuildFileHavingDependencies(
+                        "org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec:1.0.1.Final",
+                        "org.springframework:spring-core:" + SPRING_VERSION
                 )
                 .build();
 

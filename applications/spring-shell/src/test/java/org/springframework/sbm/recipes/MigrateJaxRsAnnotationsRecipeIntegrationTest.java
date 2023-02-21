@@ -38,6 +38,8 @@ public class MigrateJaxRsAnnotationsRecipeIntegrationTest extends IntegrationTes
 
                     import org.springframework.http.MediaType;
                     import org.springframework.web.bind.annotation.*;
+                    
+                    import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
                     @RestController
                     @RequestMapping(value = "/")
@@ -49,7 +51,7 @@ public class MigrateJaxRsAnnotationsRecipeIntegrationTest extends IntegrationTes
                             return "{\\"Hello\\":\\"" + name + "\\"";
                         }
 
-                        @RequestMapping(value = "/json", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+                        @RequestMapping(value = "/json", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE, method = RequestMethod.GET)
                         public String getAllPersons(@RequestParam(required = false, value = "q") String searchBy, @RequestParam(required = false, defaultValue = "0", value = "page") int page) throws Exception {
                             return "{\\"message\\":\\"No person here...\\"";
                         }

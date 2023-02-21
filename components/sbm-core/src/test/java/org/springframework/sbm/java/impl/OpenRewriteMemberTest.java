@@ -136,4 +136,17 @@ class OpenRewriteMemberTest {
         Assertions.assertThat(javaSource.getTypes().get(0).getMembers().get(1).getTypeFqName()).isEqualTo("int");
         Assertions.assertThat(javaSource.getTypes().get(0).getMembers().get(2).getTypeFqName()).isEqualTo("java.util.List");
     }
+
+    @Test
+    void testHasImportStartingWith_staticImport() {
+        final String sourceCode = """
+                import static java.math.BigDecimal.ONE;
+                
+                public class Class1 {}
+                """;
+
+        JavaSource javaSource = TestProjectContext.buildProjectContext().withJavaSources(sourceCode).build().getProjectJavaSources().list().get(0);
+
+        assertThat(javaSource.hasImportStartingWith("java.math")).isTrue();
+    }
 }

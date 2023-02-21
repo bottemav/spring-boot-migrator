@@ -25,7 +25,6 @@ import org.springframework.sbm.build.util.PomBuilder;
 import org.springframework.sbm.openrewrite.RewriteExecutionContext;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
