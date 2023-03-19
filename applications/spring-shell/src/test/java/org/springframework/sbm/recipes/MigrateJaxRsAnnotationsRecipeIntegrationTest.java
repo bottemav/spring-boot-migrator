@@ -41,6 +41,9 @@ public class MigrateJaxRsAnnotationsRecipeIntegrationTest extends IntegrationTes
                     
                     import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+                    import org.springframework.web.bind.annotation.PathVariable;
+                    import org.springframework.web.bind.annotation.RequestParam;
+                    
                     @RestController
                     @RequestMapping(value = "/")
                     public class PersonController {
